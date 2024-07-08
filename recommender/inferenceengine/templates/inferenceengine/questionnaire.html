@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Questionnaire</title>
+</head>
+<body>
+    <h1>Questionnaire</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="user_name">Your Name:</label>
+        <input type="text" id="user_name" name="user_name" required>
+        <br><br>
+        {% for question in questions %}
+            <div>
+                <p>{{ question.text }}</p>
+                {% if question.choices %}
+                    <!-- Render multiple-choice questions -->
+                    {% for choice in question.choices %}
+                        <label>
+                            <input type="radio" name="question_{{ question.id }}" value="{{ choice }}" required>
+                            {{ choice }}
+                        </label><br>
+                    {% endfor %}
+                {% else %}
+                    <!-- Render numeric input questions -->
+                    <input type="number" name="question_{{ question.id }}" min="1" max="5" required>
+                {% endif %}
+            </div>
+            <br>
+        {% endfor %}
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

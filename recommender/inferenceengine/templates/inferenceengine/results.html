@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Results</title>
+</head>
+<body>
+    <h1>Results for {{ user.user_name }}</h1>
+    <p>Mood: {{ user.user_mood }}</p>
+    <p>Submood: {{ user.user_submood }}</p>
+    <p>Personality: {{ user.user_personality }}</p>
+    <p>Personality Details: {{ user.user_personality_degree }}</p>
+
+    <ul>
+        {% for answer in answers %}
+            <li>{{ answer.question.text }}: {{ answer.answer_text }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
