@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Music Recommender System</h1>
+        <p>This system recommends music based on your personality, mood, and contextual information.</p>
+        <form method="post">
+            {% csrf_token %}
+            <label for="user_name">Enter your name to start:</label>
+            <input type="text" id="user_name" name="user_name" required>
+            <br><br>
+            <button type="submit">Start</button>
+        </form>
+    </div>
+</body>
+</html>

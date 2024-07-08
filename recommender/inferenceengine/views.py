@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
-from .models import User, Question, Answer
+from .models import User, Question, Answer, UserProgress
 from .services.Forward_Chaining import ExpertSystem
-
+from django.views.decorators.csrf import csrf_exempt
+import uuid
+"""
 def questionnaire(request):
     if request.method == 'POST':
         user_name = request.POST.get('user_name')
@@ -43,12 +45,99 @@ def questionnaire(request):
     else:
         questions = Question.objects.all()
         return render(request, 'inferenceengine/questionnaire.html', {'questions': questions})
+"""
+def home(request):
+    if request.method == 'POST':
+        user_name = request.POST.get('user_name')
+        user = User.objects.create(user_name=user_name)
+        #request.session['user_id'] = user.uid  # Save the user_id in the session
+        return redirect('questionnaire', user_id=user.uid)  # Redirect to questionnaire
+    return render(request, 'inferenceengine/home.html')
 
+@csrf_exempt  # Consider using CSRF protection for POST requests
+def questionnaire(request, user_id):
+    user = User.objects.get(uid=user_id)
+    user_name = user.user_name
 
+    if request.method == 'POST':
+        user_progress, created = UserProgress.objects.get_or_create(user=user)
+        question_id = request.POST.get('question_id')
+        answer_text = request.POST.get('answer')
+
+        if 'responses' not in request.session:
+            request.session['responses'] = {}
+
+        request.session['responses'][question_id] = answer_text
+        request.session.modified = True
+
+        user_progress.current_question += 1
+        user_progress.save()
+
+        current_question_index = user_progress.current_question
+        questions = list(Question.objects.all())  # Convert to list for index access
+        if current_question_index < len(questions):
+            question = questions[current_question_index]
+        else:
+            responses = []
+            for question_id, answer_text in request.session['responses'].items():
+                question = Question.objects.get(id=question_id)
+
+                if question.choices:
+                    response_text = answer_text
+                    response_score = None
+                else:
+                    try:
+                        response_score = int(answer_text)
+                    except ValueError:
+                        response_score = None
+                    response_text = None
+
+                Answer.objects.create(user=user, question=question, answer_text=answer_text)
+                responses.append({
+                    'mood': question.mood,
+                    'submood': question.submood,
+                    'trait': question.trait,
+                    'facet': question.facet,
+                    'response': response_score,
+                    'response_choices': response_text
+                })
+            
+            del request.session['responses']
+            user = User.objects.get(uid=user_id)
+            evaluate_mood(user, responses)
+            evaluate_personality(user, responses)
+            save_contextual_factors(user, responses)
+            expert_sys(user)
+            
+            return redirect('results', user_id=user.uid)
+
+    else:
+        user_progress, created = UserProgress.objects.get_or_create(user=user)
+        current_question_index = user_progress.current_question
+        questions = list(Question.objects.all())  # Convert to list for index access
+        if current_question_index < len(questions):
+            question = questions[current_question_index]
+        else:
+            return redirect('results', user_id=user.uid)
+
+    return render(request, 'inferenceengine/questionnaire.html', {'question': question, 'user_name': user_name})
+
+def results(request, user_id):
+    user = User.objects.get(uid=user_id)
+    recommendations = {
+        'Key Signatures': user.key_signatures,
+        'Tempo': user.tempo,
+        'Valence': user.valence,
+        'Instrumentalness': user.instrumentalness
+    }
+    return render(request, 'inferenceengine/results.html', {'user': user, 'recommendations': recommendations})
+
+"""
 def results(request, user_id):
     user = User.objects.get(uid=user_id)
     answers = Answer.objects.filter(user=user)
     return render(request, 'inferenceengine/results.html', {'user': user, 'answers': answers})
+"""
 
 def evaluate_mood(user, responses):
     mood_counts = {"Happy": 0, "Sad": 0, "Anxious": 0, "Calm": 0}

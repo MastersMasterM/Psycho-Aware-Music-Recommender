@@ -46,3 +46,7 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer_text = models.CharField(max_length=255)
     created_at = models.DateField(auto_now_add=True)
+
+class UserProgress(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    current_question = models.IntegerField(default=0)
