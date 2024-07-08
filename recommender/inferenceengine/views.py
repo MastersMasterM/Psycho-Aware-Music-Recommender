@@ -238,7 +238,6 @@ def expert_sys(user):
     es.forward_chain()
 
     print("****************************")
-    print(es.facts)
     print("Recommended Query Parameters are as follows:")
     print(f"Key Signutures: {es.facts['Key']}")
     print(f"Tempo: {es.facts['Tempo']}")
