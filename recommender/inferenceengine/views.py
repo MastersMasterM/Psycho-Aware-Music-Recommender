@@ -37,6 +37,7 @@ def questionnaire(request):
         
         evaluate_mood(user, responses)
         evaluate_personality(user, responses)
+        save_contextual_factors(user, responses)
         
         return redirect('results', user_id=user.uid)
     else:
@@ -100,4 +101,34 @@ def evaluate_personality(user, responses):
 
     user.user_personality = dominant_trait
     user.user_personality_degree = ', '.join([f"{facet}: {level}" for facet, level in personality_profile[dominant_trait].items()])
+    user.save()
+
+def save_contextual_factors(user, responses):
+    # Initialize contextual factors
+    activity = None
+    location = None
+    time_of_day = None
+    social_context = None
+    
+    # Iterate over responses and map them to the appropriate user fields
+    for response in responses:
+        if response['trait'] == 'Activity':
+            activity = response['response_choices']
+        elif response['trait'] == 'Location':
+            location = response['response_choices']
+        elif response['trait'] == 'Time of Day':
+            time_of_day = response['response_choices']
+        elif response['trait'] == 'Social Context':
+            social_context = response['response_choices']
+    
+    # Update the User model fields
+    if activity:
+        user.user_activity = activity
+    if location:
+        user.user_location = location
+    if time_of_day:
+        user.user_timeofday = time_of_day
+    if social_context:
+        user.user_social_context = social_context
+    
     user.save()
