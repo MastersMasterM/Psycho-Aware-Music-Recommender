@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import User, Question, Answer
-
+from .services.Forward_Chaining import ExpertSystem
 
 def questionnaire(request):
     if request.method == 'POST':
@@ -38,7 +38,7 @@ def questionnaire(request):
         evaluate_mood(user, responses)
         evaluate_personality(user, responses)
         save_contextual_factors(user, responses)
-        
+        expert_sys(user)
         return redirect('results', user_id=user.uid)
     else:
         questions = Question.objects.all()
@@ -132,3 +132,48 @@ def save_contextual_factors(user, responses):
         user.user_social_context = social_context
     
     user.save()
+
+def expert_sys(user):
+    es = ExpertSystem('inferenceengine/services/rules.json')
+    es.facts['Task'] = 'Make recommendation'
+    es.facts["User's Mood"] = user.user_mood
+    es.facts['Submood'] = user.user_mood
+    es.facts["User's Personality Trait"] = user.user_personality
+
+    es.facts["Personality"] = {user.user_personality : string_to_dict(user.user_personality_degree)}
+
+    es.facts["Activity"] = user.user_activity
+    es.facts["Location"] = user.user_location
+    es.facts["Time of Day"] = user.user_timeofday
+    es.facts["Social Context"] = user.user_social_context
+    es.forward_chain()
+
+    print("****************************")
+    print("Recommended Query Parameters are as follows:")
+    print(f"Key Signutures: {es.facts['Key']}")
+    print(f"Tempo: {es.facts['Tempo']}")
+    print(f"Valence: {es.facts['Valence']}")
+    print(f"Instrumentalness: {es.facts['Instrumentalness']}")
+
+    # Save recommendations to the User model
+    user.key_signatures = es.facts.get('Key', [])
+    user.tempo = es.facts.get('Tempo', [])
+    user.valence = es.facts.get('Valence', [])
+    user.instrumentalness = es.facts.get('Instrumentalness', [])
+    user.save()
+
+def string_to_dict(input_str):
+    # Split the string by commas to get each key-value pair
+    pairs = input_str.split(', ')
+    
+    # Initialize an empty dictionary
+    result_dict = {}
+    
+    # Loop through each pair
+    for pair in pairs:
+        # Split the pair by the colon to get the key and value
+        key, value = pair.split(': ')
+        # Add the key-value pair to the dictionary
+        result_dict[key] = value
+    
+    return result_dict

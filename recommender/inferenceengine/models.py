@@ -15,6 +15,12 @@ class User(models.Model):
     user_timeofday = models.CharField(max_length=100, default=None, blank=True, null=True)
     user_social_context = models.CharField(max_length=100, default=None, blank=True, null=True)
 
+    # Fields for storing recommendations
+    key_signatures = models.JSONField(default=list, blank=True, null=True)
+    tempo = models.JSONField(default=list, blank=True, null=True)
+    valence = models.JSONField(default=list, blank=True, null=True)
+    instrumentalness = models.JSONField(default=list, blank=True, null=True)
+
 class Question(models.Model):
     MOOD = 'MOOD'
     PERSONALITY = 'PERSONALITY'

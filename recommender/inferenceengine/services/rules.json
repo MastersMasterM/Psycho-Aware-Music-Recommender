@@ -1,0 +1,295 @@
+{
+  "startup_rules": [
+    {
+      "id": "Rule 1-S",
+      "condition": {"Task": "Begin"},
+      "actions": [
+        {"Task": "Assess user's mood"}
+      ]
+    }
+  ],
+  "mood_assessment_rules": [
+    {
+      "id": "Rule 1-A",
+      "condition": {"Task": "Assess user's mood"},
+      "actions": [
+        {"Run": "Mood Assessment Questionnaire"},
+        {"Task": "Assess user's personality traits"}
+      ]
+    }
+  ],
+  "personality_assessment_rules": [
+    {
+      "id": "Rule 1-B",
+      "condition": {"Task": "Assess user's personality traits"},
+      "actions": [
+        {"Run": "User Personality Assessment Questionnaire"},
+        {"Task": "Assess user's contextual factors"}
+      ]
+    }
+  ],
+  "contextual_assessment_rules": [
+    {
+      "id": "Rule 1-C",
+      "condition": {"Task": "Assess user's contextual factors"},
+      "actions": [
+        {"Ask": "What are you currently doing? (Studying, Working out, Relaxing) "},
+        {"Ask": "Where are you currently? (Home, Work, Outdoors) "},
+        {"Ask": "What time of day is it? (Morning, Afternoon, Evening) "},
+        {"Ask": "Are you alone or with others? (Alone, With Friends, With Family) "},
+        {"Task": "Make recommendation"}
+      ]
+    }
+  ],
+  "recommendation_rules": [
+    {
+      "id": "Rule 1-R",
+      "condition": {"Task": "Make recommendation", "User's Mood": "Happy", "Submood": "Elated"},
+      "actions": [
+        {"Recommend": "High-energy, upbeat music"}
+      ]
+    },
+    {
+      "id": "Rule 2-R",
+      "condition": {"Task": "Make recommendation", "User's Mood": "Happy", "Submood": "Content"},
+      "actions": [
+        {"Recommend": "Positive, soothing music"}
+      ]
+    },
+    {
+      "id": "Rule 3-R",
+      "condition": {"Task": "Make recommendation", "User's Mood": "Sad", "Submood": "Melancholic"},
+      "actions": [
+        {"Recommend": "Reflective, mellow music"}
+      ]
+    },
+    {
+      "id": "Rule 4-R",
+      "condition": {"Task": "Make recommendation", "User's Mood": "Sad", "Submood": "Depressed"},
+      "actions": [
+        {"Recommend": "Uplifting, comforting music"}
+      ]
+    },
+    {
+      "id": "Rule 5-R",
+      "condition": {"Task": "Make recommendation", "User's Mood": "Anxious", "Submood": "Stressed"},
+      "actions": [
+        {"Recommend": "Calming, slow-tempo music"}
+      ]
+    },
+    {
+      "id": "Rule 6-R",
+      "condition": {"Task": "Make recommendation", "User's Mood": "Anxious", "Submood": "Worried"},
+      "actions": [
+        {"Recommend": "Reassuring, gentle music"}
+      ]
+    },
+    {
+      "id": "Rule 7-R",
+      "condition": {"Task": "Make recommendation", "User's Mood": "Calm", "Submood": "Relaxed"},
+      "actions": [
+        {"Recommend": "Ambient, chill music"}
+      ]
+    },
+    {
+      "id": "Rule 8-R",
+      "condition": {"Task": "Make recommendation", "User's Mood": "Calm", "Submood": "Peaceful"},
+      "actions": [
+        {"Recommend": "Soft, instrumental music"}
+      ]
+    },
+    {
+      "id": "Rule 9-R",
+      "condition": {"Task": "Make recommendation", "User's Personality Trait": "Openness", "Facet": "Imagination", "Imagination Level": "High"},
+      "actions": [
+        {"Recommend": "Experimental, avant-garde music"}
+      ]
+    },
+    {
+      "id": "Rule 10-R",
+      "condition": {"Task": "Make recommendation", "User's Personality Trait": "Openness", "Facet": "Imagination", "Imagination Level": "Low"},
+      "actions": [
+        {"Recommend": "Predictable, conventional music"}
+      ]
+    },
+    {
+      "id": "Rule 11-R",
+      "condition": {"Task": "Make recommendation", "User's Personality Trait": "Conscientiousness", "Facet": "Orderliness", "Orderliness Level": "High"},
+      "actions": [
+        {"Recommend": "Structured, rhythmic music"}
+      ]
+    },
+    {
+      "id": "Rule 12-R",
+      "condition": {"Task": "Make recommendation", "User's Personality Trait": "Conscientiousness", "Facet": "Orderliness", "Orderliness Level": "Low"},
+      "actions": [
+        {"Recommend": "Spontaneous, free-form music"}
+      ]
+    },
+    {
+      "id": "Rule 13-R",
+      "condition": {"Task": "Make recommendation", "User's Personality Trait": "Extraversion", "Facet": "Sociability", "Sociability Level": "High"},
+      "actions": [
+        {"Recommend": "Energetic, social music"}
+      ]
+    },
+    {
+      "id": "Rule 14-R",
+      "condition": {"Task": "Make recommendation", "User's Personality Trait": "Extraversion", "Facet": "Sociability", "Sociability Level": "Low"},
+      "actions": [
+        {"Recommend": "Quiet, introspective music"}
+      ]
+    },
+    {
+      "id": "Rule 15-R",
+      "condition": {"Task": "Make recommendation", "User's Personality Trait": "Neuroticism", "Facet": "Anxiety", "Anxiety Level": "High"},
+      "actions": [
+        {"Recommend": "Soothing, calming music"}
+      ]
+    },
+    {
+      "id": "Rule 16-R",
+      "condition": {"Task": "Make recommendation", "User's Personality Trait": "Neuroticism", "Facet": "Anxiety", "Anxiety Level": "Low"},
+      "actions": [
+        {"Recommend": "Varied, adventurous music"}
+      ]
+    },
+    {
+      "id": "Rule 17-R",
+      "condition": {"Task": "Make recommendation", "Activity": "Studying"},
+      "actions": [
+        {"Recommend": "Soft, instrumental music"}
+      ]
+    },
+    {
+      "id": "Rule 18-R",
+      "condition": {"Task": "Make recommendation", "Activity": "Working Out"},
+      "actions": [
+        {"Recommend": "High-energy, upbeat music"}
+      ]
+    },
+    {
+      "id": "Rule 19-R",
+      "condition": {"Task": "Make recommendation", "Location": "Home"},
+      "actions": [
+        {"Recommend": "Relaxed, laid-back music"}
+      ]
+    },
+    {
+      "id": "Rule 20-R",
+      "condition": {"Task": "Make recommendation", "Location": "Work"},
+      "actions": [
+        {"Recommend": "Structured, rhythmic music"}
+      ]
+    },
+    {
+      "id": "Rule 21-R",
+      "condition": {"Task": "Make recommendation", "Time of Day": "Morning"},
+      "actions": [
+        {"Recommend": "Energetic, positive music"}
+      ]
+    },
+    {
+      "id": "Rule 22-R",
+      "condition": {"Task": "Make recommendation", "Time of Day": "Evening"},
+      "actions": [
+        {"Recommend": "Calming, soothing tracks"}
+      ]
+    },
+    {
+      "id": "Rule 23-R",
+      "condition": {"Task": "Make recommendation", "Social Context": "Alone"},
+      "actions": [
+        {"Recommend": "Introspective, mellow music"}
+      ]
+    },
+    {
+      "id": "Rule 24-R",
+      "condition": {"Task": "Make recommendation", "Social Context": "With Friends"},
+      "actions": [
+        {"Recommend": "Energetic, social music"}
+      ]
+    }
+  ],
+  "mapping_recommendations": [
+    {
+      "id": "Rule 1-M",
+      "condition": {"Recommend": ["Introspective, mellow music"]},
+      "actions": [
+        {
+          "Set": {
+            "Key": ["A Minor", "E Minor", "D Minor"],
+            "Tempo": "Slow",
+            "Valence": "Low",
+            "Instrumentalness": "High or Low"
+          }
+        }
+      ]
+    },
+    {
+      "id": "Rule 2-M",
+      "condition": {"Recommend": ["High-energy, upbeat music"]},
+      "actions": [
+        {
+          "Set":{
+            "Key": ["C Major", "G Major", "E Major"], 
+            "Tempo": "Fast", 
+            "Valence": "High", 
+            "Instrumentalness": "Low"
+          }
+        }
+      ]
+    },
+    {
+      "id": "Rule 3-M",
+      "condition": {"Recommend": ["Positive, soothing music"]},
+      "actions": [
+        {
+          "Set":{
+            "Key": ["F Major", "D Major"], 
+            "Tempo": "Medium", 
+            "Valence": "High", 
+            "Instrumentalness": "Low"
+          }
+        }
+      ]
+    },
+    {
+      "id": "Rule 4-M",
+      "condition": {"Recommend": ["Reflective, mellow music"]},
+      "actions": [
+      {
+        "Set":
+        {"Key": ["A Minor", "D Minor", "G Minor"], "Tempo": "Slow", "Valence": "Low", "Instrumentalness": "High or Low"}
+      }
+      ]
+    },
+    {
+      "id": "Rule 5-M",
+      "condition": {"Recommend": ["Uplifting, comforting music"]},
+      "actions": [
+        {"Set":
+        {"Key": ["C Major", "Bb Major"], "Tempo": "Medium", "Valence": "High", "Instrumentalness": "Low"}
+        }
+      ]
+    },
+    {
+      "id": "Rule 6-M",
+      "condition": {"Recommend": ["Calming, slow-tempo music"]},
+      "actions": [
+        {"Set":
+        {"Key": ["F Major", "Eb Major"], "Tempo": "Slow", "Valence": "Low to Medium", "Instrumentalness": "High"}
+        }
+      ]
+    },
+    {
+      "id": "Rule 7-M",
+      "condition": {"Recommend": ["Energetic, social music"]},
+      "actions": [
+        {"Set":
+        {"Key": ["A Major", "E Major", "B Major"], "Tempo": "Fast", "Valence": "High", "Instrumentalness": "Low"}
+        }
+      ]
+    }
+  ]
+}

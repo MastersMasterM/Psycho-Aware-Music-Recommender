@@ -6,13 +6,63 @@
 </head>
 <body>
     <h1>Results for {{ user.user_name }}</h1>
-    <p>Mood: {{ user.user_mood }}</p>
-    <p>Submood: {{ user.user_submood }}</p>
-    <p>Personality: {{ user.user_personality }}</p>
-    <p>Personality Details: {{ user.user_personality_degree }}</p>
-    <p>Activity: {{ user.user_activity }}</p>
-    <p>Location: {{ user.user_location }}</p>
-    <p>Time of The Day: {{ user.user_timeofday }}</p>
-    <p>Social Context: {{ user.user_social_context }}</p>
+    <p><strong>Mood:</strong> {{ user.user_mood }}</p>
+    <p><strong>Submood:</strong> {{ user.user_submood }}</p>
+    <p><strong>Personality:</strong> {{ user.user_personality }}</p>
+    <p><strong>Personality Details:</strong> {{ user.user_personality_degree }}</p>
+    <p><strong>Activity:</strong> {{ user.user_activity }}</p>
+    <p><strong>Location:</strong> {{ user.user_location }}</p>
+    <p><strong>Time of The Day:</strong> {{ user.user_timeofday }}</p>
+    <p><strong>Social Context:</strong> {{ user.user_social_context }}</p>
+    
+    <h2>Recommendations</h2>
+    <p><strong>Key Signatures:</strong> 
+        {% if user.key_signatures %}
+            <ul>
+                {% for signature in user.key_signatures %}
+                    <li>{{ signature }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            No recommendations available.
+        {% endif %}
+    </p>
+    
+    <p><strong>Tempo:</strong> 
+        {% if user.tempo %}
+            <ul>
+                {% for t in user.tempo %}
+                    <li>{{ t }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            No recommendations available.
+        {% endif %}
+    </p>
+    
+    <p><strong>Valence:</strong> 
+        {% if user.valence %}
+            <ul>
+                {% for v in user.valence %}
+                    <li>{{ v }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            No recommendations available.
+        {% endif %}
+    </p>
+    
+    <p><strong>Instrumentalness:</strong> 
+        {% if user.instrumentalness %}
+            <ul>
+                {% for i in user.instrumentalness %}
+                    <li>{{ i }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            No recommendations available.
+        {% endif %}
+    </p>
+    
 </body>
 </html>
