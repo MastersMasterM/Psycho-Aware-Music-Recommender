@@ -114,14 +114,3 @@ class ExpertSystem:
                     print(f"Condition met: {key} matches {value}")
         
         return True
-
-if __name__ == '__main__':
-    es = ExpertSystem('rules.json')
-    es.facts['Task'] = 'Begin'
-    es.forward_chain()
-    print("****************************")
-    print("Recommended Query Parameters are as follows:")
-    print(f"Key Signutures: {es.facts['Key']}")
-    print(f"Tempo: {es.facts['Tempo']}")
-    print(f"Valence: {es.facts['Valence']}")
-    print(f"Instrumentalness: {es.facts['Instrumentalness']}")
