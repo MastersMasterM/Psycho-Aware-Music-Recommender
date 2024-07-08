@@ -132,13 +132,6 @@ def results(request, user_id):
     }
     return render(request, 'inferenceengine/results.html', {'user': user, 'recommendations': recommendations})
 
-"""
-def results(request, user_id):
-    user = User.objects.get(uid=user_id)
-    answers = Answer.objects.filter(user=user)
-    return render(request, 'inferenceengine/results.html', {'user': user, 'answers': answers})
-"""
-
 def evaluate_mood(user, responses):
     mood_counts = {"Happy": 0, "Sad": 0, "Anxious": 0, "Calm": 0}
     submood_counts = {"Elated": 0, "Content": 0, "Melancholic": 0, "Depressed": 0, "Stressed": 0, "Worried": 0, "Relaxed": 0, "Peaceful": 0}

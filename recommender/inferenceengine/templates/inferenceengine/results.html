@@ -1,68 +1,156 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Results</title>
+    <link rel="stylesheet" href="{% static 'css/result_style.css' %}">
 </head>
 <body>
-    <h1>Results for {{ user.user_name }}</h1>
-    <p><strong>Mood:</strong> {{ user.user_mood }}</p>
-    <p><strong>Submood:</strong> {{ user.user_submood }}</p>
-    <p><strong>Personality:</strong> {{ user.user_personality }}</p>
-    <p><strong>Personality Details:</strong> {{ user.user_personality_degree }}</p>
-    <p><strong>Activity:</strong> {{ user.user_activity }}</p>
-    <p><strong>Location:</strong> {{ user.user_location }}</p>
-    <p><strong>Time of The Day:</strong> {{ user.user_timeofday }}</p>
-    <p><strong>Social Context:</strong> {{ user.user_social_context }}</p>
-    
-    <h2>Recommendations</h2>
-    <p><strong>Key Signatures:</strong> 
-        {% if user.key_signatures %}
-            <ul>
-                {% for signature in user.key_signatures %}
-                    <li>{{ signature }}</li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            No recommendations available.
-        {% endif %}
-    </p>
-    
-    <p><strong>Tempo:</strong> 
-        {% if user.tempo %}
-            <ul>
-                {% for t in user.tempo %}
-                    <li>{{ t }}</li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            No recommendations available.
-        {% endif %}
-    </p>
-    
-    <p><strong>Valence:</strong> 
-        {% if user.valence %}
-            <ul>
-                {% for v in user.valence %}
-                    <li>{{ v }}</li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            No recommendations available.
-        {% endif %}
-    </p>
-    
-    <p><strong>Instrumentalness:</strong> 
-        {% if user.instrumentalness %}
-            <ul>
-                {% for i in user.instrumentalness %}
-                    <li>{{ i }}</li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            No recommendations available.
-        {% endif %}
-    </p>
-    
+    <div class="container">
+        <h1>Results for {{ user.user_name }}</h1>
+        <p><strong>Mood:</strong> {{ user.user_mood }}</p>
+        <p><strong>Submood:</strong> {{ user.user_submood }}</p>
+        <p><strong>Personality:</strong> {{ user.user_personality }}</p>
+        <p><strong>Personality Details:</strong> {{ user.user_personality_degree }}</p>
+        <p><strong>Activity:</strong> {{ user.user_activity }}</p>
+        <p><strong>Location:</strong> {{ user.user_location }}</p>
+        <p><strong>Time of The Day:</strong> {{ user.user_timeofday }}</p>
+        <p><strong>Social Context:</strong> {{ user.user_social_context }}</p>
+        
+        <h2>Recommendations</h2>
+        <p><strong>Key Signatures:</strong> 
+            {% if user.key_signatures %}
+                <ul>
+                    {% for signature in user.key_signatures %}
+                        <li>{{ signature }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                No recommendations available.
+            {% endif %}
+        </p>
+        
+        <p><strong>Tempo:</strong> 
+            {% if user.tempo %}
+                <ul>
+                    {% for t in user.tempo %}
+                        <li>{{ t }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                No recommendations available.
+            {% endif %}
+        </p>
+        
+        <p><strong>Valence:</strong> 
+            {% if user.valence %}
+                <ul>
+                    {% for v in user.valence %}
+                        <li>{{ v }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                No recommendations available.
+            {% endif %}
+        </p>
+        
+        <p><strong>Instrumentalness:</strong> 
+            {% if user.instrumentalness %}
+                <ul>
+                    {% for i in user.instrumentalness %}
+                        <li>{{ i }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                No recommendations available.
+            {% endif %}
+        </p>
+
+        <div class="youtube-section">
+            <h2>Youtube Recommendations</h2>
+            <div class="youtube-recommendations" id="youtubeRecommendations">
+                <!-- youtube recommendations will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+    <script>
+       // result_script.js
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('result_script.js loaded'); // Debugging line
+
+    // YouTube API key
+    const apiKey = 'AIzaSyAj2QLlcj_8e6q_GXBSMthLGOTd_xMhGjg';  // Replace with your YouTube API Key
+    const mood = '{{ user.user_mood }}';  // This will be populated server-side
+
+    // Show the loading spinner
+    const recommendationsContainer = document.getElementById('youtubeRecommendations');
+    recommendationsContainer.innerHTML = `
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Loading recommendations...</p>
+        </div>
+    `;
+
+    // Build the search query
+    let query = 'mood ' + mood + ' official music';
+
+
+    // Encode the query to be URL-safe
+    const encodedQuery = encodeURIComponent(query);
+
+    async function fetchYouTubeRecommendations() {
+        try {
+            console.log(`Fetching YouTube recommendations for query: ${query}`);
+            const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodedQuery}&type=video&key=${apiKey}&maxResults=5`);
+            console.log(`API Response Status: ${response.status}`);  // Log the status code
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            const data = await response.json();
+            console.log('YouTube API Response:', data);  // Log the full API response
+
+            const recommendations = data.items;
+
+            // Clear the loading spinner
+            recommendationsContainer.innerHTML = '';
+
+            // Check if recommendations are available
+            if (recommendations.length > 0) {
+                // Display recommendations
+                recommendations.forEach(item => {
+                    const videoId = item.id.videoId;
+                    const title = item.snippet.title;
+                    const description = item.snippet.description;
+                    const thumbnail = item.snippet.thumbnails.high.url;
+                    const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+
+                    recommendationsContainer.innerHTML += `
+                        <div class="youtube-video">
+                            <img src="${thumbnail}" alt="${title}">
+                            <div>
+                                <a href="${videoUrl}" target="_blank">${title}</a>
+                                <p>${description}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                recommendationsContainer.innerHTML = '<p>No recommendations available.</p>';
+            }
+        } catch (error) {
+            console.error('Error fetching YouTube recommendations:', error);
+            recommendationsContainer.innerHTML = '<p>Error fetching recommendations. Please try again later.</p>';
+        }
+    }
+
+    fetchYouTubeRecommendations();
+});
+
+
+    </script>
 </body>
 </html>
