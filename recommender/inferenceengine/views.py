@@ -2,50 +2,8 @@ from django.shortcuts import render, redirect
 from .models import User, Question, Answer, UserProgress
 from .services.Forward_Chaining import ExpertSystem
 from django.views.decorators.csrf import csrf_exempt
-import uuid
-"""
-def questionnaire(request):
-    if request.method == 'POST':
-        user_name = request.POST.get('user_name')
-        user = User.objects.create(user_name=user_name)
-        responses = []
 
-        for key, answer_text in request.POST.items():
-            if key.startswith('question_'):
-                question_id = int(key.split('_')[1])
-                question = Question.objects.get(id=question_id)
 
-                if question.choices:
-                    # For multiple-choice questions
-                    response_text = answer_text
-                    response_score = None
-                else:
-                    # For numeric questions
-                    try:
-                        response_score = int(answer_text)
-                    except ValueError:
-                        response_score = None  # Ignore invalid numeric responses
-                    response_text = None
-
-                Answer.objects.create(user=user, question=question, answer_text=answer_text)
-                responses.append({
-                    'mood': question.mood,
-                    'submood': question.submood,
-                    'trait': question.trait,
-                    'facet': question.facet,
-                    'response': response_score,
-                    'response_choices': response_text
-                })
-        
-        evaluate_mood(user, responses)
-        evaluate_personality(user, responses)
-        save_contextual_factors(user, responses)
-        expert_sys(user)
-        return redirect('results', user_id=user.uid)
-    else:
-        questions = Question.objects.all()
-        return render(request, 'inferenceengine/questionnaire.html', {'questions': questions})
-"""
 def home(request):
     if request.method == 'POST':
         user_name = request.POST.get('user_name')
