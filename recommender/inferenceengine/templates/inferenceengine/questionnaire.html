@@ -15,7 +15,7 @@
             <input type="hidden" name="user_name" value="{{ user_name }}">
             <input type="hidden" name="question_id" value="{{ question.id }}">
             <div>
-                <p>{{ question.text }}</p>
+                <h2>{{ question.text }}</h2>
                 {% if question.choices %}
                     <div class="choices">
                         {% for choice in question.choices %}
@@ -26,6 +26,7 @@
                         {% endfor %}
                     </div>
                 {% else %}
+                <p>Enter a Number Between 1 (Not Very Related) to 5 (Very Related)</p>
                     <input type="number" name="answer" min="1" max="5" required>
                 {% endif %}
             </div>
