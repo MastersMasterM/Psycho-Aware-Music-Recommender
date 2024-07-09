@@ -2,9 +2,32 @@ from django.shortcuts import render, redirect
 from .models import User, Question, Answer, UserProgress
 from .services.Forward_Chaining import ExpertSystem
 from django.views.decorators.csrf import csrf_exempt
-from .services.dataf import casebase
+from .services.dataf import casebase, casebase_retain
+from django.http import JsonResponse
+import json
+import requests
 
 
+def fetch_youtube_recommendations(request, mood):
+    api_key = 'AIzaSyAj2QLlcj_8e6q_GXBSMthLGOTd_xMhGjg'
+    query = f'mood {mood} official music'
+    url = f'https://www.googleapis.com/youtube/v3/search?part=snippet&q={query}&type=video&key={api_key}&maxResults=5'
+    
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        recommendations = [
+            {
+                'title': item['snippet']['title'],
+                'link': f"https://www.youtube.com/watch?v={item['id']['videoId']}",
+                'image_url': item['snippet']['thumbnails']['high']['url']
+            }
+            for item in data['items']
+        ]
+        return JsonResponse({'status': 'success', 'recommendations': recommendations, 'data': data})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Failed to fetch YouTube recommendations'}, status=500)
+    
 def home(request):
     if request.method == 'POST':
         user_name = request.POST.get('user_name')
@@ -90,8 +113,18 @@ def results(request, user_id):
         'Instrumentalness': user.instrumentalness
     }
     list_case_base = casebase('./inferenceengine/services/case_base.csv', recommendations)
-    print(f"*********** \n {list_case_base}")
-    return render(request, 'inferenceengine/results.html', {'user': user, 'recommendations': recommendations, 'case_base':eval(list_case_base)})
+    mood = user.user_mood
+    youtube_response = requests.get(f'http://127.0.0.1:8000/fetch-youtube-recommendations/{mood}/').json()
+    youtube_recommendations = youtube_response.get('recommendations', [])
+    
+    casebase_retain('./inferenceengine/services/case_base.csv', user, youtube_recommendations)
+    
+    return render(request, 'inferenceengine/results.html', {
+        'user': user,
+        'recommendations': recommendations,
+        'case_base': eval(list_case_base),
+        'youtube_recommendations': youtube_recommendations
+    })
 
 def evaluate_mood(user, responses):
     mood_counts = {"Happy": 0, "Sad": 0, "Anxious": 0, "Calm": 0}

@@ -73,89 +73,22 @@
                 <p>{{ i }}</p>
             {% endfor %}
         </div>
-        <div class="youtube-section">
-            <h2>Youtube Recommendations</h2>
-            <div class="youtube-recommendations" id="youtubeRecommendations">
-                <!-- youtube recommendations will be inserted here by JavaScript -->
-            </div>
+        <h2>YouTube Recommendations</h2>
+        <div class="youtube-video">
+            {% if youtube_recommendations %}
+                <ul>
+                    {% for recommendation in youtube_recommendations %}
+                        <li>
+                            <a href="{{ recommendation.link }}" target="_blank">
+                                <img src="{{ recommendation.image_url }}" alt="{{ recommendation.title }}" style="width: 120px; height: 90px;">
+                                {{ recommendation.title }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No YouTube recommendations available.</p>
+            {% endif %}
         </div>
-    </div>
-    <script>
-       // result_script.js
-
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('result_script.js loaded'); // Debugging line
-
-    // YouTube API key
-    const apiKey = 'AIzaSyAj2QLlcj_8e6q_GXBSMthLGOTd_xMhGjg';  // Replace with your YouTube API Key
-    const mood = '{{ user.user_mood }}';  // This will be populated server-side
-
-    // Show the loading spinner
-    const recommendationsContainer = document.getElementById('youtubeRecommendations');
-    recommendationsContainer.innerHTML = `
-        <div class="loading">
-            <div class="spinner"></div>
-            <p>Loading recommendations...</p>
-        </div>
-    `;
-
-    // Build the search query
-    let query = 'mood ' + mood + ' official music';
-
-
-    // Encode the query to be URL-safe
-    const encodedQuery = encodeURIComponent(query);
-
-    async function fetchYouTubeRecommendations() {
-        try {
-            console.log(`Fetching YouTube recommendations for query: ${query}`);
-            const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodedQuery}&type=video&key=${apiKey}&maxResults=5`);
-            console.log(`API Response Status: ${response.status}`);  // Log the status code
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok ' + response.statusText);
-            }
-            const data = await response.json();
-            console.log('YouTube API Response:', data);  // Log the full API response
-
-            const recommendations = data.items;
-
-            // Clear the loading spinner
-            recommendationsContainer.innerHTML = '';
-
-            // Check if recommendations are available
-            if (recommendations.length > 0) {
-                // Display recommendations
-                recommendations.forEach(item => {
-                    const videoId = item.id.videoId;
-                    const title = item.snippet.title;
-                    const description = item.snippet.description;
-                    const thumbnail = item.snippet.thumbnails.high.url;
-                    const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-
-                    recommendationsContainer.innerHTML += `
-                        <div class="youtube-video">
-                            <img src="${thumbnail}" alt="${title}">
-                            <div>
-                                <a href="${videoUrl}" target="_blank">${title}</a>
-                                <p>${description}</p>
-                            </div>
-                        </div>
-                    `;
-                });
-            } else {
-                recommendationsContainer.innerHTML = '<p>No recommendations available.</p>';
-            }
-        } catch (error) {
-            console.error('Error fetching YouTube recommendations:', error);
-            recommendationsContainer.innerHTML = '<p>Error fetching recommendations. Please try again later.</p>';
-        }
-    }
-
-    fetchYouTubeRecommendations();
-});
-
-
-    </script>
 </body>
 </html>
