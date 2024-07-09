@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import User, Question, Answer, UserProgress
 from .services.Forward_Chaining import ExpertSystem
 from django.views.decorators.csrf import csrf_exempt
-from .services.dataf import casebase, casebase_retain
+from .services.dataf import casebase_retrive, casebase_retain
 from django.http import JsonResponse
 import json
 import requests
@@ -112,7 +112,7 @@ def results(request, user_id):
         'Valence': user.valence,
         'Instrumentalness': user.instrumentalness
     }
-    list_case_base = casebase('./inferenceengine/services/case_base.csv', recommendations)
+    list_case_base = casebase_retrive('./inferenceengine/services/case_base.csv', recommendations)
     mood = user.user_mood
     youtube_response = requests.get(f'http://127.0.0.1:8000/fetch-youtube-recommendations/{mood}/').json()
     youtube_recommendations = youtube_response.get('recommendations', [])

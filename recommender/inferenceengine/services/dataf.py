@@ -1,36 +1,6 @@
 import pandas as pd
 from scipy.spatial.distance import hamming
-from sklearn.metrics import jaccard_score
 import numpy as np
-
-"""
-# Sample data with real songs
-data = {
-    'Key Signatures': [['A major', 'C major'], ['B minor', 'E minor'], ['C major', 'G major'], ['D minor', 'F major'], ['E major', 'A minor']],
-    'Tempo': ['Fast', 'Medium', 'Slow', 'Fast', 'Medium'],
-    'Valence': ['High', 'Low', 'High', 'Low', 'High'],
-    'Instrumentalness': ['Low', 'High', 'Low', 'High', 'Low'],
-    'Recommended Songs': [
-        ['Shape of You - Ed Sheeran', 'Blinding Lights - The Weeknd', 'Uptown Funk - Mark Ronson ft. Bruno Mars', 'Can’t Stop the Feeling! - Justin Timberlake', 'Happy - Pharrell Williams'],
-        ['Lose Yourself to Dance - Daft Punk', 'Strobe - Deadmau5', 'Ghosts n Stuff - Deadmau5', 'Nero - Promises', 'Above & Beyond - Sun & Moon'],
-        ['Someone Like You - Adele', 'Let Her Go - Passenger', 'All of Me - John Legend', 'Stay with Me - Sam Smith', 'Thinking Out Loud - Ed Sheeran'],
-        ['Voodoo Child - Jimi Hendrix', 'Kashmir - Led Zeppelin', 'Black Sabbath - Black Sabbath', 'Highway to Hell - AC/DC', 'Iron Man - Black Sabbath'],
-        ['Rolling in the Deep - Adele', 'Chandelier - Sia', 'Bad Romance - Lady Gaga', 'Firework - Katy Perry', 'Shake It Off - Taylor Swift']
-    ]
-}
-
-# Create a DataFrame
-df = pd.DataFrame(data)
-
-df.to_csv('.\case_base.csv', index=False)
-"""
-# User profile (example)
-user_profile = {
-    'Key Signatures': ['C major', 'G major'],
-    'Tempo': 'Slow',
-    'Valence': 'High',
-    'Instrumentalness': 'Low'
-}
 
 # Function to compute Jaccard distance for key signatures
 def jaccard_distance(set1, set2):
@@ -51,7 +21,7 @@ def compute_distance(case, user_profile):
         distance += hamming([case[attr]], [user_profile[attr]])
     return distance
 
-def casebase(dir, user_profile):
+def casebase_retrive(dir, user_profile):
     df = pd.read_csv(dir)
     print(user_profile)
     user_profile['Tempo'] = user_profile['Tempo'][0]
