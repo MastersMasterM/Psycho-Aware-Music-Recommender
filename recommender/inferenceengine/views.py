@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import User, Question, Answer, UserProgress
 from .services.Forward_Chaining import ExpertSystem
 from django.views.decorators.csrf import csrf_exempt
-from .services.dataf import casebase_retrive, casebase_retain
+from .services.casebase_engine import casebase_retrive, casebase_retain
 from django.http import JsonResponse
 import json
 import requests
