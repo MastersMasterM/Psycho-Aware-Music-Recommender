@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import User, Question, Answer, UserProgress
 from .services.Forward_Chaining import ExpertSystem
 from django.views.decorators.csrf import csrf_exempt
+from .services.dataf import casebase
 
 
 def home(request):
@@ -88,7 +89,9 @@ def results(request, user_id):
         'Valence': user.valence,
         'Instrumentalness': user.instrumentalness
     }
-    return render(request, 'inferenceengine/results.html', {'user': user, 'recommendations': recommendations})
+    list_case_base = casebase('./inferenceengine/services/case_base.csv', recommendations)
+    print(f"*********** \n {list_case_base}")
+    return render(request, 'inferenceengine/results.html', {'user': user, 'recommendations': recommendations, 'case_base':eval(list_case_base)})
 
 def evaluate_mood(user, responses):
     mood_counts = {"Happy": 0, "Sad": 0, "Anxious": 0, "Calm": 0}

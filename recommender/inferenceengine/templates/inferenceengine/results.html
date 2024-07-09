@@ -67,7 +67,12 @@
                 No recommendations available.
             {% endif %}
         </p>
-
+        <h2>Case Base Reasoning</h2>
+        <div class="case-base-reasoning">
+            {% for i in case_base %}
+                <p>{{ i }}</p>
+            {% endfor %}
+        </div>
         <div class="youtube-section">
             <h2>Youtube Recommendations</h2>
             <div class="youtube-recommendations" id="youtubeRecommendations">
