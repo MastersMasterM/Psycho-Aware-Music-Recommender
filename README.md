@@ -3,7 +3,7 @@
 This project is a psycho-aware rule-based music recommendation system. It integrates personality traits, emotional states, and various music attributes to recommend music that aligns with the user's psychological profile. The system uses a Django web application, a forward-chaining inference engine based on rules, and a case-based engine that works on and updates historical data. The recommendation rules are designed to update over time based on user interaction and historical data.
 
 ## Knowledge Tree
-[Knowledge Tree.png]
+![Knowledge Tree](https://github.com/MastersMasterM/Psycho-Aware-Music-Recommender/blob/master/Knowledge%20Tree.png)
 
 ## Features
 
@@ -16,9 +16,7 @@ This project is a psycho-aware rule-based music recommendation system. It integr
 
 ## Prerequisites
 
-- Python 3.8+
-- Django 3.2+
-- YouTube Data API v3
+- Google Developer Account (YouTube Data API v3 key)
 
 ## Installation
 
@@ -45,7 +43,11 @@ This project is a psycho-aware rule-based music recommendation system. It integr
     python manage.py migrate
     python populate_questions.py
     ```
-
+5. **Setting Your API Key**:
+```
+edit recommender\inferenceengine\views.py
+add your API key to fetch_youtube_recommendations
+```
 ## Usage
 
 1. **Start the development server**:
