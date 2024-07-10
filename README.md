@@ -44,7 +44,7 @@ This project is a psycho-aware rule-based music recommendation system. It integr
     python populate_questions.py
     ```
 5. **Setting Your API Key**:
-- Open recommender\inferenceengine\views.py With a Text Editor
+- Open `recommender\inferenceengine\views.py` With a Text Editor
 - Add Your API Key To `fetch_youtube_recommendations` Function
 ## Usage
 
